@@ -26,13 +26,10 @@ jobs:
         run: |
           curl -Lo kargo "https://github.com/mumoshu/kargo/releases/download/v0.1.0/kargo-linux-amd64"
           chmod +x kargo
-          sudo mv kargo /usr/local/bin/kargo
-
-      - name: test Kargo
-        run: |    
           kargo --version
+          sudo cp kargo /usr/local/bin/kargo
           ls -lr /usr/local/bin/kargo
-          
+
       - name: Deploy to GKE with Kargo
         run: |
           # Determine environment and apply kustomize overlay

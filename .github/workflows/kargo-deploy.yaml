@@ -1,0 +1,24 @@
+name: Kargo CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - stg
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Kargo
+        run: |
+          curl -LO "https://github.com/kargo-ci/kargo/releases/download/v0.2.0/kargo-linux-amd64" && \
+          chmod +x kargo-linux-amd64 && \
+          sudo mv kargo-linux-amd64 /usr/local/bin/kargo
+
+      - name: Run Kargo Pipeline
+        run: kargo

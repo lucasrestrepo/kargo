@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sample-service-production
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-repo.git'  # Replace with your repository URL
+    targetRevision: HEAD
+    path: k8s/overlays/production
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: production-namespace  # Replace with the target namespace for production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

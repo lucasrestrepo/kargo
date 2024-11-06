@@ -28,6 +28,11 @@ jobs:
           chmod +x kargo
           sudo mv kargo /usr/local/bin/kargo
 
+      - name: test Kargo
+        run: |    
+          kargo --version
+          ls -lr /usr/local/bin/kargo
+          
       - name: Deploy to GKE with Kargo
         run: |
           # Determine environment and apply kustomize overlay

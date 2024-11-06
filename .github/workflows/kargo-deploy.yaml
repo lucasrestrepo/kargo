@@ -11,7 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      KUBECONFIG: ${{ secrets.GKE_KUBECONFIG }}  # Use kubeconfig from GitHub Secrets
+      KUBECONFIG: ${{ secrets.GKE_KUBECONFIG }}
 
     steps:
       - name: Checkout code
@@ -19,7 +19,8 @@ jobs:
 
       - name: Set up Kubeconfig
         run: |
-          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config
+          mkdir -p ~/.kube  # Create the .kube directory if it doesn’t exist
+          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config  # Write the kubeconfig file
 
       - name: Install Kargo
         run: |

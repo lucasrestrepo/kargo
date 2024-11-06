@@ -19,15 +19,21 @@ jobs:
 
       - name: Set up Kubeconfig
         run: |
-          mkdir -p ~/.kube  # Create the .kube directory if it doesn’t exist
-          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config  # Write the kubeconfig file
+          mkdir -p ~/.kube
+          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config
 
-      - name: Install Kargo
+      - name: Download and Install Kargo
         run: |
-          curl -LO "https://github.com/kargo-ci/kargo/releases/download/v0.2.0/kargo-linux-amd64" && \
-          chmod +x kargo-linux-amd64 && \
-          sudo mv kargo-linux-amd64 /usr/local/bin/kargo
+          # Download Kargo binary
+          curl -Lo kargo "https://github.com/kargo-ci/kargo/releases/download/v0.2.0/kargo-linux-amd64"
+          # Make sure the file is executable
+          chmod +x kargo
+          # Move it to a directory in the PATH
+          sudo mv kargo /usr/local/bin/kargo
+          # Verify that Kargo is installed
+          kargo --version
 
       - name: Run Kargo Pipeline
         run: kargo
+
 

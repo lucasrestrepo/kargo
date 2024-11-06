@@ -2,16 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sample-service-dev
-  namespace: argocd
+  namespace: default
 spec:
-  project: default
+  project: web-app-dev
   source:
-    repoURL: 'https://github.com/your-repo.git'  # Replace with your repository URL
+    repoURL: 'https://github.com/lucasrestrepo/kargo.git'
     targetRevision: HEAD
     path: k8s/overlays/dev
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: dev-namespace  # Replace with the target namespace for dev
+    namespace: dev
   syncPolicy:
     automated:
       prune: true

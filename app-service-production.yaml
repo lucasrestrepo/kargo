@@ -2,16 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sample-service-production
-  namespace: argocd
+  namespace: default
 spec:
-  project: default
+  project: web-app-prd
   source:
-    repoURL: 'https://github.com/your-repo.git'  # Replace with your repository URL
+    repoURL: 'https://github.com/lucasrestrepo/kargo.git'  # Replace with your repository URL
     targetRevision: HEAD
-    path: k8s/overlays/production
+    path: k8s/overlays/prd
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: production-namespace  # Replace with the target namespace for production
+    namespace: prd
   syncPolicy:
     automated:
       prune: true

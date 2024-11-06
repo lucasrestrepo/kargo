@@ -5,11 +5,11 @@ pipeline:
         - name: Lint YAML Files
           image: mikefarah/yq
           script:
-            - yq e '.' k8s/**/*.yaml > /dev/null  # Validates YAML syntax for all files
+            - yq e '.' k8s/**/*.yaml > /dev/null
         - name: Validate Kustomize
           image: bitnami/kubectl
           script:
-            - kubectl kustomize k8s/base > /dev/null  # Validates the base config
+            - kubectl kustomize k8s/base > /dev/null
             - kubectl kustomize k8s/overlays/dev > /dev/null
             - kubectl kustomize k8s/overlays/staging > /dev/null
             - kubectl kustomize k8s/overlays/production > /dev/null
@@ -28,7 +28,7 @@ pipeline:
         - name: Deploy Staging Environment
           image: bitnami/kubectl
           script:
-            - kubectl apply -k k8s/overlays/stg
+            - kubectl apply -k k8s/overlays/staging
 
     - name: Deploy to Production
       if: branch == 'main'
@@ -36,4 +36,4 @@ pipeline:
         - name: Deploy Production Environment
           image: bitnami/kubectl
           script:
-            - kubectl apply -k k8s/overlays/prd
+            - kubectl apply -k k8s/overlays/production

@@ -1,20 +1,27 @@
-name: Kargo CI/CD Pipeline
+name: Kargo CI/CD Pipeline for GKE
 
 on:
   push:
     branches:
+      - main
       - dev
       - stg
-      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: ${{ secrets.GKE_KUBECONFIG }}  # Use kubeconfig from GitHub Secrets
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Kargo
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config
+
+      - name: Install Kargo
         run: |
           curl -LO "https://github.com/kargo-ci/kargo/releases/download/v0.2.0/kargo-linux-amd64" && \
           chmod +x kargo-linux-amd64 && \
@@ -22,3 +29,4 @@ jobs:
 
       - name: Run Kargo Pipeline
         run: kargo
+

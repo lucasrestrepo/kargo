@@ -17,10 +17,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up GKE credentials
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config
 
       - name: Install Kargo
         run: |

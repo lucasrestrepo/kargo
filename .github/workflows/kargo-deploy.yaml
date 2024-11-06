@@ -28,10 +28,11 @@ jobs:
           sudo tar -C /usr/local -xzf go1.17.6.linux-amd64.tar.gz
           echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
 
-      - name: Clone and Compile Kargo
+      - name: Download, Extract, and Compile Kargo
         run: |
-          git clone https://github.com/mumoshu/kargo.git
-          cd kargo
+          curl -L https://github.com/mumoshu/kargo/archive/refs/tags/v0.1.0.tar.gz -o kargo-v0.1.0.tar.gz
+          tar -xzf kargo-v0.1.0.tar.gz
+          cd kargo-0.1.0
           go build -o ../kargo
           cd ..
 

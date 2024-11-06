@@ -1,0 +1,18 @@
+name: sample-service
+
+deployments:
+  dev:
+    name: "Deploy to Dev"
+    apply:
+      - kubectl kustomize k8s/overlays/dev | kubectl apply -f -
+  
+  staging:
+    name: "Deploy to Staging"
+    apply:
+      - kubectl kustomize k8s/overlays/stg | kubectl apply -f -
+  
+  production:
+    name: "Deploy to Production"
+    apply:
+      - kubectl kustomize k8s/overlays/prd | kubectl apply -f -
+

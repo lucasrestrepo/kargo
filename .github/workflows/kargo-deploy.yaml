@@ -1,4 +1,4 @@
-name: Kargo CI/CD Pipeline for GKE
+name: Kargo CI/CD Pipeline for GKE with Kustomize
 
 on:
   push:
@@ -17,23 +17,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.GKE_KUBECONFIG }}" > ~/.kube/config
+      - name: Set up GKE credentials
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
 
-      - name: Download and Install Kargo
+      - name: Install Kargo
         run: |
-          # Download Kargo binary
-          curl -Lo kargo "https://github.com/kargo-ci/kargo/releases/download/v0.2.0/kargo-linux-amd64"
-          # Make sure the file is executable
+          curl -Lo kargo "https://github.com/mumoshu/kargo/releases/download/v0.1.0/kargo-linux-amd64"
           chmod +x kargo
-          # Move it to a directory in the PATH
           sudo mv kargo /usr/local/bin/kargo
-          # Verify that Kargo is installed
-          kargo --version
 
-      - name: Run Kargo Pipeline
-        run: kargo
-
-
+      - name: Deploy to GKE with Kargo
+        run: |
+          # Determine environment and apply kustomize overlay
+          if [ "${GITHUB_REF##*/}" == "main" ]; then
+            kargo -f kargo.yaml apply production
+          elif [ "${GITHUB_REF##*/}" == "stg" ]; then
+            kargo -f kargo.yaml apply staging
+          elif [ "${GITHUB_REF##*/}" == "dev" ]; then
+            kargo -f kargo.yaml apply dev
+          else
+            echo "No matching environment for branch ${GITHUB_REF##*/}"
+          fi

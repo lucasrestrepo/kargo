@@ -30,14 +30,22 @@ jobs:
 
       - name: Download, Extract, and Compile Kargo
         run: |
+          # Download and extract Kargo source code
           curl -L https://github.com/mumoshu/kargo/archive/refs/tags/v0.1.0.tar.gz -o kargo-v0.1.0.tar.gz
           tar -xzf kargo-v0.1.0.tar.gz
+          
+          # Change directory to the extracted folder and compile
           cd kargo-0.1.0
-          go build -o ../kargo
+          go build -o kargo  # This creates the kargo binary in the current directory
+          
+          # Move the compiled binary to the root directory and set permissions
+          mv kargo ../kargo
           cd ..
           chmod +x kargo  # Ensure kargo is executable
-          ls -l kargo     # List file permissions for debugging
-          pwd             # Print the current directory for debugging
+          
+          # Debugging: List details to verify the compiled binary
+          file ./kargo
+          ls -l ./kargo
 
       - name: Deploy to GKE with Kargo
         run: |

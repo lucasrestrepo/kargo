@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-sitio-seguro
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: app
+          image: vulnerables/web-dvwa
+          ports:
+            - containerPort: 80

@@ -35,6 +35,9 @@ jobs:
           cd kargo-0.1.0
           go build -o ../kargo
           cd ..
+          chmod +x kargo  # Ensure kargo is executable
+          ls -l kargo     # List file permissions for debugging
+          pwd             # Print the current directory for debugging
 
       - name: Deploy to GKE with Kargo
         run: |
